@@ -1,0 +1,128 @@
+#!/bin/sh
+
+# Configuración de River con Alt como modificador y Alacritty como terminal
+
+# Asignar Alt como modificador principal
+mod=Alt
+
+# Iniciar Alacritty con Alt+Shift+Return
+riverctl map normal $mod+Shift Return spawn alacritty
+
+# Iniciar wofi con Alt+d
+riverctl map normal $mod D spawn bemenu-s.sh
+
+# Alt+Q para cerrar la ventana enfocada
+riverctl map normal $mod Q close
+
+# Alt+Shift+E para salir de River
+riverctl map normal $mod+Shift E exit
+
+# Alt+J y Alt+K para enfocar la siguiente/anterior ventana
+riverctl map normal $mod J focus-view next
+riverctl map normal $mod K focus-view previous
+
+# Alt+Shift+J y Alt+Shift+K para intercambiar ventanas
+riverctl map normal $mod+Shift J swap next
+riverctl map normal $mod+Shift K swap previous
+
+# Alt+Period y Alt+Comma para enfocar el siguiente/anterior monitor
+riverctl map normal $mod Period focus-output next
+riverctl map normal $mod Comma focus-output previous
+
+# Alt+Shift+Period y Alt+Shift+Comma para mover ventanas entre monitores
+riverctl map normal $mod+Shift Period send-to-output next
+riverctl map normal $mod+Shift Comma send-to-output previous
+
+# Alt+Return para llevar la ventana enfocada al frente
+riverctl map normal $mod Return zoom
+
+# Alt+H y Alt+L para ajustar la proporción del área principal
+riverctl map normal $mod H send-layout-cmd rivertile "main-ratio -0.05"
+riverctl map normal $mod L send-layout-cmd rivertile "main-ratio +0.05"
+
+# Alt+Shift+H y Alt+Shift+L para incrementar/decrementar el número de ventanas principales
+riverctl map normal $mod+Shift H send-layout-cmd rivertile "main-count +1"
+riverctl map normal $mod+Shift L send-layout-cmd rivertile "main-count -1"
+
+# Alt+Ctrl+{H,J,K,L} para mover ventanas
+riverctl map normal $mod+Control H move left 100
+riverctl map normal $mod+Control J move down 100
+riverctl map normal $mod+Control K move up 100
+riverctl map normal $mod+Control L move right 100
+
+# Alt+Ctrl+Shift+{H,J,K,L} para redimensionar ventanas
+riverctl map normal $mod+Control+Shift H resize horizontal -100
+riverctl map normal $mod+Control+Shift J resize vertical 100
+riverctl map normal $mod+Control+Shift K resize vertical -100
+riverctl map normal $mod+Control+Shift L resize horizontal 100
+
+# Alt + Botón izquierdo del ratón para mover ventanas
+riverctl map-pointer normal $mod BTN_LEFT move-view
+
+# Alt + Botón derecho del ratón para redimensionar ventanas
+riverctl map-pointer normal $mod BTN_RIGHT resize-view
+
+# Alt + Botón central del ratón para alternar modo flotante
+riverctl map-pointer normal $mod BTN_MIDDLE toggle-float
+
+# Asignar tags (etiquetas) con Alt+[1-9]
+for i in $(seq 1 9)
+do
+    tags=$((1 << ($i - 1)))
+
+    # Alt+[1-9] para enfocar un tag
+    riverctl map normal $mod $i set-focused-tags $tags
+
+    # Alt+Shift+[1-9] para asignar la ventana actual a un tag
+    riverctl map normal $mod+Shift $i set-view-tags $tags
+
+    # Alt+Ctrl+[1-9] para alternar el enfoque de un tag
+    riverctl map normal $mod+Control $i toggle-focused-tags $tags
+
+    # Alt+Shift+Ctrl+[1-9] para alternar la asignación de un tag a la ventana actual
+    riverctl map normal $mod+Shift+Control $i toggle-view-tags $tags
+done
+
+# Alt+0 para enfocar todos los tags
+# Alt+Shift+0 para asignar la ventana actual a todos los tags
+all_tags=$(((1 << 32) - 1))
+riverctl map normal $mod 0 set-focused-tags $all_tags
+riverctl map normal $mod+Shift 0 set-view-tags $all_tags
+
+# Alt+Space para alternar modo flotante
+riverctl map normal $mod Space toggle-float
+
+# Alt+F para alternar pantalla completa
+riverctl map normal $mod F toggle-fullscreen
+
+# Alt+{Up,Right,Down,Left} para cambiar la orientación del diseño
+riverctl map normal $mod Up    send-layout-cmd rivertile "main-location top"
+riverctl map normal $mod Right send-layout-cmd rivertile "main-location right"
+riverctl map normal $mod Down  send-layout-cmd rivertile "main-location bottom"
+riverctl map normal $mod Left  send-layout-cmd rivertile "main-location left"
+
+# Declarar un modo "passthrough" para pruebas
+riverctl declare-mode passthrough
+
+# Alt+F11 para entrar/salir del modo "passthrough"
+riverctl map normal $mod F11 enter-mode passthrough
+riverctl map passthrough $mod F11 enter-mode normal
+
+# Colores de fondo y bordes
+riverctl border-width 1
+riverctl background-color 0x002b36
+riverctl border-color-focused 0x003399FF
+riverctl border-color-unfocused 0x586e75
+
+# Configurar la tasa de repetición del teclado
+riverctl set-repeat 50 300
+
+# Iniciar rivertile como generador de diseños predeterminado
+riverctl default-layout rivertile
+rivertile -view-padding 4 -outer-padding 4 -main-location left -main-ratio 0.5 &
+
+# Fondo de pantalla
+swaybg -i ~/.wallpaper/arch-linux-minimal-logo-4k-ln.jpg -m fill &
+
+# waybar :/
+waybar &

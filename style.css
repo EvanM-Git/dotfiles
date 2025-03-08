@@ -1,0 +1,91 @@
+* {
+    font-family: "Fira Code", "Font Awesome 5 Free";
+    font-size: 12px; 
+}
+
+window#waybar {
+	background: transparent;
+}
+
+window#waybar.hidden {
+	opacity: 0.2;
+}
+
+#window {
+	margin-top: 6px;
+	padding-left: 10px;
+	padding-right: 10px;
+	border-radius: 10px;
+	transition: none;
+        color: transparent;
+	background: transparent;
+}
+
+#tags button {
+    padding: 0 5px;
+    background-color: transparent;
+    color: #eceff4;
+    border-bottom: 3px solid transparent;
+}
+
+#tags button.focused {
+    border-bottom: 3px solid #81a1c1;
+}
+
+#clock {
+    font-weight: bold;
+    color: #88c0d0;
+}
+
+#battery {
+    color: #a3be8c;
+}
+
+#battery.warning {
+    color: #ebcb8b;
+}
+
+#battery.critical {
+    color: #bf616a;
+}
+
+#pulseaudio {
+    color: #88c0d0;
+}
+
+#pulseaudio.muted {
+    color: #bf616a;
+}
+
+#network {
+    color: #88c0d0;
+}
+
+#network.disconnected {
+    color: #bf616a;
+}
+
+#tray {
+    padding: 0 10px;
+}
+
+#cpu {
+    color: #88c0d0;  /* Color del texto */
+    padding: 0 5px;  /* Espaciado interno */
+    margin: 0 2px;   /* Espaciado externo */
+}
+
+#memory {
+    color: #a3be8c;  /* Color del texto */
+    padding: 0 5px;  /* Espaciado interno */
+    margin: 0 2px;   /* Espaciado externo */
+}
+
+/* Fondo sólido para los módulos */
+#tags, #clock, #pulseaudio, #network, #battery, #tray, #cpu, #memory {
+    background-color: #2e3440;  /* Fondo sólido */
+    border: 1px solid #4c566a;  /* Borde */
+    border-radius: 5px;         /* Bordes redondeados */
+    padding: 0 5px;             /* Espaciado interno */
+    margin: 0 2px;              /* Espaciado externo */
+}
